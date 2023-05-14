@@ -1,2 +1,11 @@
-﻿  database.cpp
-  cashRegisterSystem2.vcxproj -> G:\Projects\cash-register-system\cashRegisterSystem\x64\Debug\cashRegisterSystem2.exe
+﻿  cashRegisterSystem.cpp
+D:\CRS\cashRegisterSystem\cashRegisterSystem\cashRegisterSystem.cpp(1,1): warning C4828: The file contains a character starting at offset 0x225 that is illegal in the current source character set (codepage 65001).
+D:\CRS\cashRegisterSystem\cashRegisterSystem\cashRegisterSystem.cpp(1,1): warning C4828: The file contains a character starting at offset 0x227 that is illegal in the current source character set (codepage 65001).
+D:\CRS\cashRegisterSystem\cashRegisterSystem\cashRegisterSystem.cpp(1,1): warning C4828: The file contains a character starting at offset 0x22a that is illegal in the current source character set (codepage 65001).
+D:\CRS\cashRegisterSystem\cashRegisterSystem\cashRegisterSystem.cpp(1,1): warning C4828: The file contains a character starting at offset 0x22c that is illegal in the current source character set (codepage 65001).
+D:\CRS\cashRegisterSystem\cashRegisterSystem\cashRegisterSystem.cpp(1,1): warning C4828: The file contains a character starting at offset 0x280 that is illegal in the current source character set (codepage 65001).
+D:\CRS\cashRegisterSystem\cashRegisterSystem\cashRegisterSystem.cpp(1,1): warning C4828: The file contains a character starting at offset 0x282 that is illegal in the current source character set (codepage 65001).
+D:\CRS\cashRegisterSystem\cashRegisterSystem\cashRegisterSystem.cpp(1,1): warning C4828: The file contains a character starting at offset 0x285 that is illegal in the current source character set (codepage 65001).
+D:\CRS\cashRegisterSystem\cashRegisterSystem\cashRegisterSystem.cpp(1,1): warning C4828: The file contains a character starting at offset 0x2c7 that is illegal in the current source character set (codepage 65001).
+D:\CRS\cashRegisterSystem\cashRegisterSystem\cashRegisterSystem.cpp(1,1): warning C4828: The file contains a character starting at offset 0x2c9 that is illegal in the current source character set (codepage 65001).
+  cashRegisterSystem2.vcxproj -> D:\CRS\cashRegisterSystem\cashRegisterSystem\x64\Debug\cashRegisterSystem2.exe

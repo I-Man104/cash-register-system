@@ -43,11 +43,19 @@ void cashRegisterSystem::on_name_button_clicked(int quantity, QString name, floa
     scrollLayout->insertItem(0, spacer);
     scrollLayout->insertWidget(1, frame);
 
-    connect(Delete_button.back(), &QPushButton::clicked, [this, btn = Delete_button.back(), totPrice, names]() {
-        Delete_On_Click(btn, totPrice->text().toFloat(), names->text());
+    connect(Delete_button.back(), &QPushButton::clicked, [this, d = Delete_button.back(), totPrice, names]() {
+        Delete_On_Click(d, totPrice->text().toFloat(), names->text());
         });
 
-    if (i % 2 == 1) frame->setStyleSheet("QFrame{background-color:rgba(184, 184, 184, 255)}");
+    if (i % 2 == 1)
+        frame->setStyleSheet("QFrame{background-color:rgba(184, 184, 184, 255)}");
+
+    MappingLayout.insert(Delete_button.back(), frame);
+
+    if (myHash.contains(name))
+        myHash[name] += quantity;
+    else
+        myHash.insert(name, quantity);
 
     i++;
 
@@ -55,25 +63,11 @@ void cashRegisterSystem::on_name_button_clicked(int quantity, QString name, floa
     QSpacerItem* bottomSpacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
     scrollLayout->addItem(bottomSpacer);
 
-    MappingLayout.insert(Delete_button.back(), frame);
-    QList<QVariant> values;
-    if (myHash.contains(name)) {
-        values = myHash[name];
-        values[0] = values[0].toInt() + quantity;
-        values[1] = values[1].toFloat() + totalPrice;
-        myHash[name] = values;
-    }
-    else {
-        values << quantity << totalPrice;
-        myHash.insert(name, values);
-    }
-
 }
 
 void cashRegisterSystem::Delete_On_Click(QPushButton* del, float totalPrice, QString name) {
     myHash.remove(name);
     QFrame* layout = MappingLayout.take(del);
-
     withDiscount = on_check_discount_clicked();
 
     TotalBalanceForOperation -= totalPrice;
@@ -91,66 +85,41 @@ void cashRegisterSystem::Delete_On_Click(QPushButton* del, float totalPrice, QSt
     delete layout;
 }
 
-float cashRegisterSystem::on_check_discount_clicked(float price) {
-    const QString phoneNumber = m_ui->phone_number->text();
-    if (phoneNumber.isEmpty()) {
-        QMessageBox::warning(this, "oh no", "Phone number is empty");
-        return 0;
-    }
-
-    // Open the database
-    if (sqlite3_open("mydatabase.db", &m_customersDB) != SQLITE_OK) {
+bool cashRegisterSystem::on_check_discount_clicked() {
+    sqlite3_stmt* stmt;
+    float price = (m_ui->price_after->text()).toFloat();
+    int rc = sqlite3_open("mydatabase.db", &m_customersDB);
+    if (rc != SQLITE_OK) {
         QMessageBox::warning(this, "oh no", "Cannot open database");
-        return 0;
-    }
-
-    // Prepare the query
-    const QString query = "SELECT class FROM Customers WHERE phone_number = ?";
-    sqlite3_stmt* stmt = nullptr;
-    if (sqlite3_prepare_v2(m_customersDB, query.toUtf8().constData(), -1, &stmt, NULL) != SQLITE_OK) {
-        QMessageBox::warning(this, "oh no", "Cannot prepare query");
         sqlite3_close(m_customersDB);
-        return 0;
     }
-
-    // Bind the parameter to the phone number
-    if (sqlite3_bind_text(stmt, 1, phoneNumber.toUtf8().constData(), -1, SQLITE_TRANSIENT) != SQLITE_OK) {
-        QMessageBox::warning(this, "oh no", "Cannot bind parameter");
+    std::stringstream ss;
+    ss << "select class from Customers where phone_number ='" << m_ui->phone_number->text().toStdString() << "'";
+    QMessageBox mess;
+    QString query = QString::fromStdString(ss.str());
+    rc = sqlite3_prepare_v2(m_customersDB, query.toUtf8().constData(), -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        QMessageBox::warning(this, "oh no", query);
         sqlite3_finalize(stmt);
         sqlite3_close(m_customersDB);
-        return 0;
     }
-
-    // Execute the query and process the result
-    bool discountApplied = false;
-    if (sqlite3_step(stmt) == SQLITE_ROW) {
-        const char* customerClass = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
-        if (QString::fromUtf8(customerClass) == "\u0637\u0627\u0644\u0628" || QString::fromUtf8(customerClass) == "\u0639\u0645\u064A\u0644 \u0645\u0647\u0645") {
-            discountApplied = true;
-            if (price == SLOT_PRICE) {
-                price = m_ui->price_after->text().toFloat();
-                price *= 0.9;
-                m_ui->price_after->setText(QString::number(price));
-                m_ui->check_discount->setDisabled(true);
-            }
-            else {
-                price *= 0.9;
-                sqlite3_finalize(stmt);
-                sqlite3_close(m_customersDB);
-                return price;
-            }
-        }
-        else {
-            if (price != SLOT_PRICE) return price;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        const char* Class = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        size_t len = strlen(Class);
+       
+        if (strcmp(Class, "\u0637\u0627\u0644\u0628") == 0 || strcmp(Class, "\u0639\u0645\u064A\u0644 \u0645\u0647\u0645") == 0)
+        {
+            price = price * 0.9;
+            m_ui->price_after->setText(QString::number(price));
+            m_ui->check_discount->setDisabled(true);
+            sqlite3_finalize(stmt);
+            sqlite3_close(m_customersDB);
+            return true;
         }
     }
-
-    // Finalize the statement and close the database
     sqlite3_finalize(stmt);
     sqlite3_close(m_customersDB);
-
-    // Return the result
-    return discountApplied;
+    return false;
 }
 
 void cashRegisterSystem::on_cancel_order_clicked()
@@ -168,18 +137,16 @@ void cashRegisterSystem::on_retrieve_clicked()
     payOperation('-');
 }
 
+
+
 void cashRegisterSystem::payOperation(char type) {
     
     Database db("mydatabase.db");
     db.updateCustomerTotalPaid(m_ui->phone_number->text().toStdString(), m_ui->price_after->text().toFloat(), type);
-    QHashIterator<QString, QList<QVariant>> i(myHash);
+    QHashIterator<QString, int> i(myHash);
     while (i.hasNext()) {
         i.next();
-        // name, quantity, type(add, subtract)
-        db.updateProductQuantity(i.key().toStdString(), i.value().at(0).toInt(), updateType(type));
-        // name, quantity, price
-        float price = on_check_discount_clicked(i.value().at(1).toFloat());
-        db.insertOrUpdateOperation(i.key().toStdString(), i.value().at(0).toInt(), price, type);
+        db.updateProductQuantity(i.key().toStdString(), i.value(), updateType(type));
     }
     DeleteAll();
     db.~Database();

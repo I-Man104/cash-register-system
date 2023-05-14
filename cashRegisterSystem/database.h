@@ -14,15 +14,10 @@ public:
     void insertProdRows(string, string, int, string);
     void updateCustomerTotalPaid(string, float,char);
     void updateProductQuantity(string, int, char);
-    void insertOrUpdateOperation(string, int, float, char);
     void DeleteProdRow(string);
     private:
     sqlite3* m_db;
-
-    void insertOperation(string, int, float, string);
-    void updateOperation(string, int, float, string);
     int getRowCount(sqlite3*, const char*);
-    bool isRowExist(string, string);
 };
 
 #endif /* DATABASE_H */

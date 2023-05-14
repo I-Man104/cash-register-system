@@ -13,8 +13,8 @@
 #include "database.h"
 #include <string>
 #include <QCoreApplication>
-
-#define SLOT_PRICE -1
+#include <QStandardItemModel>
+#include <qshortcut.h>
 
 using namespace std;
 class cashRegisterSystem : public QMainWindow {
@@ -25,6 +25,7 @@ public:
     ~cashRegisterSystem();
      signals:
     void functionName(QString name);
+   
 private:
     Ui::cashRegisterSystem2Class* m_ui;
     bool m_loadedOnce[4];
@@ -34,13 +35,17 @@ private:
     float TotalBalanceForOperationDiscounted;
     bool withDiscount;
     int i;
+    string namesearch;
+    string phonesearch;
+    int rank;
     QVector<QPushButton*> Delete_button;
     QHash<QPushButton*, QFrame*> MappingLayout;
-    QHash<QString, QList<QVariant>> myHash;
+    QHash<QString, int> myHash;
     void populateProductList(QWidget*, QString);
     void DeleteAll();
     void payOperation(char);
     char updateType(char);
+    void search();
 private slots:
     void on_name_button_clicked(int, QString, float);
     void on_snacks_clicked();
@@ -52,10 +57,14 @@ private slots:
     void on_add_new_clicked();
     void on_go_back_clicked();
     void Delete_On_Click(QPushButton*, float, QString);
-    float on_check_discount_clicked(float = SLOT_PRICE);
+    bool on_check_discount_clicked();
     void on_cancel_order_clicked();
     void on_sell_clicked();
     void on_retrieve_clicked();
+    void on_customers_clicked();
+    void on_backFromCustomers_clicked();  
+    void on_Search_btn_clicked();
+        
 
 };
 

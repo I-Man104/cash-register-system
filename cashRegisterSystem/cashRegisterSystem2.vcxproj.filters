@@ -55,7 +55,7 @@
     <ClCompile Include="CreatingAccount.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="admin.cpp">
+    <ClCompile Include="customersForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

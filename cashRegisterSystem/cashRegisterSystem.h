@@ -16,6 +16,10 @@
 #include <QStandardItemModel>
 #include <qshortcut.h>
 
+#include <qtableview.h>
+
+#define SLOT_PRICE -1
+
 using namespace std;
 class cashRegisterSystem : public QMainWindow {
     Q_OBJECT
@@ -23,13 +27,20 @@ class cashRegisterSystem : public QMainWindow {
 public:
     cashRegisterSystem(QWidget* parent = nullptr);
     ~cashRegisterSystem();
-     signals:
-    void functionName(QString name);
+
    
+public slots:
+    void Add_Item_names();
+    void Show_Sell_window();
+    void Show_window(string, QWidget*);
+    void Show_retrieve_window();
+    void Show_total_window();
+
 private:
     Ui::cashRegisterSystem2Class* m_ui;
     bool m_loadedOnce[4];
     sqlite3* m_ProductsDB;
+    sqlite3* m_OperationsDB;
     sqlite3* m_customersDB;
     float TotalBalanceForOperation;
     float TotalBalanceForOperationDiscounted;
@@ -40,8 +51,15 @@ private:
     int rank;
     QVector<QPushButton*> Delete_button;
     QHash<QPushButton*, QFrame*> MappingLayout;
-    QHash<QString, int> myHash;
+    string Item_names;
+    QVector<QPushButton*> Delete_button;
+    QHash<QPushButton*, QFrame*> MappingLayout;
+    QHash<QString, QList<QVariant>> myHash;
+    QHash<QString, QList<QVariant>> sellOperation;
+    QHash<QString, QList<QVariant>> retrieveOperation;
+    void InsertInHashOperations(QHash < QString, QList<QVariant>>&, QString name, float price, int Quantity_Sell);
     void populateProductList(QWidget*, QString);
+
     void DeleteAll();
     void payOperation(char);
     char updateType(char);
@@ -61,10 +79,15 @@ private slots:
     void on_cancel_order_clicked();
     void on_sell_clicked();
     void on_retrieve_clicked();
+
     void on_customers_clicked();
     void on_backFromCustomers_clicked();  
     void on_Search_btn_clicked();
         
+    void on_add_item_clicked();
+    void on_add_quantity_clicked();
+    void on_remove_item_clicked();
+    void on_remove_quantity_clicked();
 
 };
 

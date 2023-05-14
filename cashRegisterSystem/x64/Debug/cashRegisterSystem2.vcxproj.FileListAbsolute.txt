@@ -3,4 +3,4 @@ G:\Projects\cash-register-system\cashRegisterSystem2\x64\Debug\cashRegisterSyste
 D:\Projects\cashing\cash-register-system\cashRegisterSystem\x64\Debug\cashRegisterSystem2.exe
 G:\Projects\cash-register-system\cashRegisterSystem\x64\Debug\cashRegisterSystem2.exe
 G:\cash-register-system\cashRegisterSystem\x64\Debug\cashRegisterSystem2.exe
-D:\CRS\cashRegisterSystem\cashRegisterSystem\x64\Debug\cashRegisterSystem2.exe
+D:\Cashing system Repo\cash-register-system\cashRegisterSystem\x64\Debug\cashRegisterSystem2.exe

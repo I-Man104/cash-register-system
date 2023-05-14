@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="login">
      <widget class="QLineEdit" name="username_field">
@@ -821,8 +821,28 @@ border:none;</string>
         </rect>
        </property>
        <property name="currentIndex">
-        <number>-1</number>
+        <number>0</number>
        </property>
+       <item>
+        <property name="text">
+         <string>Drink</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>vegetables</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Snacks</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>fruit</string>
+        </property>
+       </item>
       </widget>
      </widget>
      <widget class="QLabel" name="label_22">
@@ -922,6 +942,9 @@ font-weight: bold;</string>
           <width>409</width>
           <height>339</height>
          </rect>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
         </property>
        </widget>
       </widget>

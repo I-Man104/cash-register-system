@@ -15,6 +15,7 @@ public:
     void updateCustomerTotalPaid(string, float,char);
     void updateProductQuantity(string, int, char);
     void DeleteProdRow(string);
+    void SelectAllItemsFromTable(string);
     private:
     sqlite3* m_db;
     int getRowCount(sqlite3*, const char*);

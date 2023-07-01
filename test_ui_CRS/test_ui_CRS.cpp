@@ -67,14 +67,14 @@ void test_ui_CRS::populateProductList(QVBoxLayout* productsVerticalLayout, QLabe
     }
     //Creating a grid layout...
 
-
     int verticalItems = 0;
-    int horizontalItems = 0;
+    int horizontalItems = 5;
     QLabel* nameLabel;
     QVector<QPushButton*> add_button;
     QDoubleSpinBox* quantityBox;
     int i = 0;
     QGridLayout* grid = new QGridLayout(this);
+    grid->setAlignment( Qt::AlignRight);
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         double quantity = sqlite3_column_double(stmt, 1);
         const char* name = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
@@ -84,10 +84,8 @@ void test_ui_CRS::populateProductList(QVBoxLayout* productsVerticalLayout, QLabe
         nameLabel = new QLabel(QString::fromUtf8(name));
         nameLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         nameLabel->setStyleSheet("border: none; font-size:16px; font-weight:bold;");
-        grid->setAlignment(Qt::AlignTop);
 
         //Assigning the strings to widgets...
-
         add_button.push_back(new QPushButton("Add To Cart!"));
 
         quantityBox = new QDoubleSpinBox();
@@ -121,11 +119,11 @@ void test_ui_CRS::populateProductList(QVBoxLayout* productsVerticalLayout, QLabe
         frame->setMaximumSize(149, 156);
         //adding all the widgets to the previously cretaed grid layout...
         grid->addWidget(frame, verticalItems, horizontalItems);
-        horizontalItems++;
-        if (horizontalItems % 5 == 0)
+        horizontalItems--;
+        if (horizontalItems == 0)
         {
             verticalItems++;
-            horizontalItems = 0;
+            horizontalItems = 5;
         }
         i++;
     }
@@ -193,7 +191,8 @@ void test_ui_CRS::on_name_button_clicked(double quantity, QString name, float pr
             checkButton, phoneNumberField);
     });
 
-    if (i % 2 == 1) frame->setStyleSheet("QFrame{background-color:rgba(184, 184, 184, 255)}");
+    if (i % 2 == 1) frame->setStyleSheet("QFrame{background-color:rgba(185, 185, 190, 255)}");
+    if (i % 2 == 0) frame->setStyleSheet("QFrame{background-color:rgba(220, 220, 225, 255)}");
 
     i++;
 

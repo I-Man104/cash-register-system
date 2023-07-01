@@ -20,9 +20,6 @@ private:
     float TotalBalanceForOperationDiscounted = 0;
     int i = 0;
     QVector<QPushButton*> Delete_button;
-    
-
-
     void Delete_On_Click(QPushButton*, float, QString, int, QLabel*, QLabel*, QPushButton*, QLineEdit*);
 
 
@@ -31,11 +28,20 @@ private:
 
     sqlite3* m_ProductsDB;
     Ui::test_ui_CRSClass* m_ui;
+
+
+
+
+
     QList<QLabel*> categories;
     void showCategoriesList();
-    void populateProductList(QVBoxLayout*, QLabel*, QVBoxLayout*, QLabel*, QLabel*, QScrollArea*, QPushButton*, QLineEdit*);
     void showAllProducts();
     QLabel* makeLabel(QString content);
+
+
+
+
+    void populateProductList(QVBoxLayout*, QLabel*, QVBoxLayout*, QLabel*, QLabel*, QScrollArea*, QPushButton*, QLineEdit*);
 public slots:
     void itemClickedHandler(int item);
 

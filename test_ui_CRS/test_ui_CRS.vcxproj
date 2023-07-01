@@ -89,6 +89,7 @@
     <ClCompile Include="sqlite\sqlite3.c" />
     <ClCompile Include="test_ui_CRS.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="Widget.ui" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\sqlite3.h" />
